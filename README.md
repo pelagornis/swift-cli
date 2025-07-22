@@ -1,5 +1,10 @@
 # Swift CLI
 
+![Official](https://badge.pelagornis.com/official.svg)
+![SPM](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)
+![Swift](https://img.shields.io/badge/Swift-6.1-orange.svg)
+[![License](https://img.shields.io/github/license/pelagornis/swift-cli)](https://github.com/pelagornis/swift-cli/blob/main/LICENSE)
+
 A SwiftUI-inspired framework for building interactive command-line applications in Swift. This framework provides a declarative, reactive approach to creating terminal-based user interfaces with familiar SwiftUI concepts.
 
 ## Features
