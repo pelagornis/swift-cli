@@ -14,7 +14,6 @@ class Control: @preconcurrency LayerDrawing {
 
     var root: Control { parent?.root ?? self }
 
-    @MainActor
     func addSubview(_ view: Control, at index: Int) {
         self.children.insert(view, at: index)
         layer.addLayer(view.layer, at: index)
@@ -31,7 +30,6 @@ class Control: @preconcurrency LayerDrawing {
         }
     }
 
-    @MainActor
     func removeSubview(at index: Int) {
         if children[index].isFirstResponder || root.window?.firstResponder?.isDescendant(of: children[index]) == true {
             root.window?.firstResponder?.resignFirstResponder()
@@ -52,7 +50,7 @@ class Control: @preconcurrency LayerDrawing {
         return control === parent || parent.isDescendant(of: control)
     }
 
-    @MainActor func makeLayer() -> Layer {
+    func makeLayer() -> Layer {
         let layer = Layer()
         layer.content = self
         return layer
@@ -63,7 +61,7 @@ class Control: @preconcurrency LayerDrawing {
     func size(proposedSize: Size) -> Size {
         proposedSize
     }
-    @MainActor
+
     func layout(size: Size) {
         layer.frame.size = size
     }
@@ -85,19 +83,16 @@ class Control: @preconcurrency LayerDrawing {
     func cell(at position: Position) -> Cell? { nil }
 
     // MARK: - Event handling
-    @MainActor
     func handleEvent(_ char: Character) {
         for subview in children {
             subview.handleEvent(char)
         }
     }
 
-    @MainActor
     func becomeFirstResponder() {
         scroll(to: .zero)
     }
 
-    @MainActor
     func resignFirstResponder() {}
 
     var isFirstResponder: Bool { root.window?.firstResponder === self }
