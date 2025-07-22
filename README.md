@@ -16,13 +16,18 @@ A SwiftUI-inspired framework for building interactive command-line applications 
 - **Event Handling**: Keyboard input and focus management
 - **Cross-platform**: Works on macOS and Linux
 
+## Requirements
+
+- Swift 6.1+
+- macOS 12.0+ or Linux
+
 ## Installation
 
 Add this package to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/pelagornis/swift-cli.git", from: "1.0.0")
+    .package(url: "https://github.com/pelagornis/swift-cli.git", from: "0.1.0")
 ]
 ```
 
@@ -294,11 +299,6 @@ struct FormView: View {
     }
 }
 ```
-
-## Requirements
-
-- Swift 6.1+
-- macOS 12.0+ or Linux
 
 ## Contributing
 
