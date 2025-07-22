@@ -1,5 +1,5 @@
 import XCTest
-@testable import SwiftTUI
+@testable import CommandLine
 
 final class RectTests: XCTestCase {
     func testUnion() throws {

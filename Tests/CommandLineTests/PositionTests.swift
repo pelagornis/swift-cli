@@ -1,5 +1,5 @@
 import XCTest
-@testable import SwiftTUI
+@testable import CommandLine
 
 final class PositionTests: XCTestCase {
     func testAdd() throws {
