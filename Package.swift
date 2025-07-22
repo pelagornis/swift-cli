@@ -1,26 +1,31 @@
-// swift-tools-version: 5.6
-
+// swift-tools-version: 6.1
 import PackageDescription
 
 let package = Package(
-    name: "SwiftTUI",
+    name: "swift-cli",
     platforms: [
-        .macOS(.v11)
+        .macOS(.v14)
     ],
     products: [
+        .executable(name: "example-cli", targets: ["ExampleCommandLine"]),
         .library(
-            name: "SwiftTUI",
-            targets: ["SwiftTUI"]),
+            name: "CommandLine",
+            targets: ["CommandLine"]),
     ],
     dependencies: [
-         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0")
+        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.4.5")
     ],
     targets: [
-        .target(
-            name: "SwiftTUI",
-            dependencies: []),
+        .executableTarget(
+            name: "ExampleCommandLine",
+            dependencies: [
+                "CommandLine"
+            ]
+        ),
+        .target(name: "CommandLine"),
         .testTarget(
-            name: "SwiftTUITests",
-            dependencies: ["SwiftTUI"]),
+            name: "CommandLineTests",
+            dependencies: ["CommandLine"]
+        ),
     ]
 )
