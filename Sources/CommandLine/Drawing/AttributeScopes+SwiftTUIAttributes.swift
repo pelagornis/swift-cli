@@ -2,7 +2,7 @@ import Foundation
 
 @available(macOS 12, *)
 extension AttributeScopes {
-    public struct SwiftTUIAttributes: AttributeScope {
+    public struct UIAttributes: AttributeScope, Sendable {
         public let backgroundColor = BackgroundColorAttribute()
         public let foregroundColor = ForegroundColorAttribute()
         public let bold = BoldAttribute()
@@ -14,38 +14,38 @@ extension AttributeScopes {
 }
 
 @available(macOS 12, *)
-extension AttributeScopes.SwiftTUIAttributes {
-    public struct BackgroundColorAttribute: AttributedStringKey {
+extension AttributeScopes.UIAttributes {
+    public struct BackgroundColorAttribute: AttributedStringKey, Sendable {
         public typealias Value = Color
         public static let name = "BackgroundColor"
     }
 
-    public struct ForegroundColorAttribute: AttributedStringKey {
+    public struct ForegroundColorAttribute: AttributedStringKey, Sendable {
         public typealias Value = Color
         public static let name = "ForegroundColor"
     }
 
-    public struct BoldAttribute: AttributedStringKey {
+    public struct BoldAttribute: AttributedStringKey, Sendable {
         public typealias Value = Bool
         public static let name = "Bold"
     }
 
-    public struct ItalicAttribute: AttributedStringKey {
+    public struct ItalicAttribute: AttributedStringKey, Sendable {
         public typealias Value = Bool
         public static let name = "Italic"
     }
 
-    public struct StrikethroughAttribute: AttributedStringKey {
+    public struct StrikethroughAttribute: AttributedStringKey, Sendable {
         public typealias Value = Bool
         public static let name = "Strikethrough"
     }
 
-    public struct UnderlineAttribute: AttributedStringKey {
+    public struct UnderlineAttribute: AttributedStringKey, Sendable {
         public typealias Value = Bool
         public static let name = "Underline"
     }
 
-    public struct InvertedAttribute: AttributedStringKey {
+    public struct InvertedAttribute: AttributedStringKey, Sendable {
         public typealias Value = Bool
         public static let name = "Inverted"
     }
@@ -53,7 +53,7 @@ extension AttributeScopes.SwiftTUIAttributes {
 
 @available(macOS 12, *)
 public extension AttributeDynamicLookup {
-  subscript<T: AttributedStringKey>(dynamicMember keyPath: KeyPath<AttributeScopes.SwiftTUIAttributes, T>) -> T {
+  subscript<T: AttributedStringKey>(dynamicMember keyPath: KeyPath<AttributeScopes.UIAttributes, T>) -> T {
     self[T.self]
   }
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct HStack<Content: View>: View, PrimitiveView, LayoutRootView {
+public struct HStack<Content: View>: View, PrimitiveView, @preconcurrency LayoutRootView {
     public let content: Content
     let alignment: VerticalAlignment
     let spacing: Extended?
@@ -33,7 +33,7 @@ public struct HStack<Content: View>: View, PrimitiveView, LayoutRootView {
         control.alignment = alignment
         control.spacing = spacing ?? 1
     }
-
+    
     func insertControl(at index: Int, node: Node) {
         (node.control as! HStackControl).addSubview(node.children[0].control(at: index), at: index)
     }

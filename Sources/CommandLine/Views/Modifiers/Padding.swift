@@ -1,20 +1,23 @@
 import Foundation
 
 public extension View {
+    @MainActor
     func padding(_ edges: Edges = .all, _ length: Extended? = nil) -> some View {
         return Padding(content: self, edges: edges, length: length)
     }
 
+    @MainActor
     func padding(_ length: Extended) -> some View {
         return Padding(content: self, edges: .all, length: length)
     }
-  
+
+    @MainActor
     func padding(_ edges: Edges = .all, _ length: Int) -> some View {
         return Padding(content: self, edges: edges, length: .init(length))
     }
 }
 
-private struct Padding<Content: View>: View, PrimitiveView, ModifierView {
+private struct Padding<Content: View>: View, PrimitiveView, @preconcurrency ModifierView {
     let content: Content
     let edges: Edges
     let length: Extended?

@@ -3,7 +3,7 @@ import Foundation
 public extension View {
     /// Aligns content to the top leading corner by default. Use the `.infinity` value for
     /// `maxWidth` or `maxHeight` to allow views to take up all space.
-    func frame(
+    @MainActor func frame(
         minWidth: Extended? = nil,
         maxWidth: Extended? = nil,
         minHeight: Extended? = nil,
@@ -14,7 +14,7 @@ public extension View {
     }
 }
 
-private struct FlexibleFrame<Content: View>: View, PrimitiveView, ModifierView {
+private struct FlexibleFrame<Content: View>: View, PrimitiveView, @preconcurrency ModifierView {
     let content: Content
     let minWidth: Extended?
     let maxWidth: Extended?

@@ -16,6 +16,7 @@ public struct State<T>: AnyState {
     /// a reference to state stored in a Node.
     var valueReference = StateReference()
 
+    @MainActor
     public var wrappedValue: T {
         get {
             guard let node = valueReference.node,
@@ -41,12 +42,8 @@ public struct State<T>: AnyState {
         }
     }
 
+    @MainActor
     public var projectedValue: Binding<T> {
-        // Note: this works, but it is not as efficient as in SwiftUI.
-        // In SwiftUI, Bindings can actively observe state. If you have a
-        // @State variable in a view that is not directly used in the body,
-        // but only in child views through @Bindings, updating the @Bindings
-        // will only invalidate the child views.
         Binding<T>(get: { wrappedValue }, set: { wrappedValue = $0 })
     }
 }

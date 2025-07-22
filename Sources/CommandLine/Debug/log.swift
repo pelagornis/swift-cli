@@ -7,11 +7,12 @@ import Foundation
 /// ```
 /// tail -f /tmp/swift_tui_log
 /// ```
+@MainActor
 public func log(_ item: Any, terminator: String = "\n") {
     print(item, terminator: terminator, to: &logStream)
 }
 
-var logStream = LogStream()
+@MainActor var logStream = LogStream()
 
 struct LogStream: TextOutputStream {
     func write(_ string: String) {

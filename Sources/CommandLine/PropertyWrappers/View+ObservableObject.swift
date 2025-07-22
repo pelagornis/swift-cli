@@ -3,6 +3,7 @@ import Foundation
 import Combine
 
 extension View {
+    @MainActor
     func setupObservedObjectProperties(node: Node) {
         for (label, value) in Mirror(reflecting: self).children {
             if let label, let observedObject = value as? AnyObservedObject {

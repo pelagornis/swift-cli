@@ -12,7 +12,7 @@ public enum HorizontalAlignment {
     case trailing
 }
 
-public struct Alignment {
+public struct Alignment: @unchecked Sendable {
     public var horizontalAlignment: HorizontalAlignment
     public var verticalAlignment: VerticalAlignment
 

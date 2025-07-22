@@ -1,14 +1,15 @@
 import Foundation
 
 public extension View {
-    func onAppear(_ action: @escaping () -> Void) -> some View {
+    @MainActor
+    func onAppear(_ action: @escaping @Sendable () -> Void) -> some View {
         return OnAppear(content: self, action: action)
     }
 }
 
-private struct OnAppear<Content: View>: View, PrimitiveView, ModifierView {
+private struct OnAppear<Content: View>: View, PrimitiveView, @preconcurrency ModifierView {
     let content: Content
-    let action: () -> Void
+    let action: @Sendable () -> Void
 
     static var size: Int? { Content.size }
 
@@ -28,12 +29,14 @@ private struct OnAppear<Content: View>: View, PrimitiveView, ModifierView {
         return onAppearControl
     }
 
-    private class OnAppearControl: Control {
-        var action: () -> Void
-        var didAppear = false
+    private final class OnAppearControl: Control {
+        private let action: @Sendable () -> Void
+        private var _didAppear = false
+        private let lock = NSLock()
 
-        init(action: @escaping () -> Void) {
+        init(action: @escaping @Sendable () -> Void) {
             self.action = action
+            super.init()
         }
 
         override func size(proposedSize: Size) -> Size {
@@ -43,9 +46,19 @@ private struct OnAppear<Content: View>: View, PrimitiveView, ModifierView {
         override func layout(size: Size) {
             super.layout(size: size)
             children[0].layout(size: size)
-            if !didAppear {
-                didAppear = true
-                DispatchQueue.main.async { [action] in action() }
+
+            lock.lock()
+            let alreadyAppeared = _didAppear
+            if !alreadyAppeared {
+                _didAppear = true
+            }
+            lock.unlock()
+
+            if !alreadyAppeared {
+                let actionCopy = action
+                Task { @MainActor in
+                    actionCopy()
+                }
             }
         }
     }

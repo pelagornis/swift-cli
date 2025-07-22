@@ -4,6 +4,7 @@ public extension View {
   /// Define a style for `Divider` component
   /// - Parameter style: choose a style between `.default`, `.doubled`, `.heavy`
   /// - Returns: Divider styled
+    @MainActor
     func style(_ style: DividerStyle = .default) -> some View {
         environment(\.dividerStyle, style)
     }

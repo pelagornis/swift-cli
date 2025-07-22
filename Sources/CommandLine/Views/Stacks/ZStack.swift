@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ZStack<Content: View>: View, PrimitiveView, LayoutRootView {
+public struct ZStack<Content: View>: View, PrimitiveView, @preconcurrency LayoutRootView {
     public let content: Content
     let alignment: Alignment
     

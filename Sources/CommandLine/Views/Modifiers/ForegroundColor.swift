@@ -1,7 +1,7 @@
 import Foundation
 
 public extension View {
-    func foregroundColor(_ color: Color) -> some View {
+    @MainActor func foregroundColor(_ color: Color) -> some View {
         environment(\.foregroundColor, color)
     }
 }

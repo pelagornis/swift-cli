@@ -40,6 +40,7 @@ final class Node {
         self.view = view
     }
 
+    @MainActor
     func update(using view: GenericView) {
         build()
         view.updateNode(self)
@@ -49,6 +50,7 @@ final class Node {
 
     /// The total number of controls in the node.
     /// The node does not need to be fully built for the size to be computed.
+    @MainActor
     var size: Int {
         if let size = type(of: view).size { return size }
         build()
@@ -56,6 +58,7 @@ final class Node {
     }
 
     /// The number of controls in the parent node _before_ the current node.
+    @MainActor
     private var offset: Int {
         var offset = 0
         for i in 0 ..< index {
@@ -64,6 +67,7 @@ final class Node {
         return offset
     }
 
+    @MainActor
     func build() {
         if !built {
             self.view.buildNode(self)
@@ -75,7 +79,7 @@ final class Node {
     }
 
     // MARK: - Changing nodes
-
+    @MainActor
     func addNode(at index: Int, _ node: Node) {
         guard node.parent == nil else { fatalError("Node is already in tree") }
         children.insert(node, at: index)
@@ -90,6 +94,7 @@ final class Node {
         }
     }
 
+    @MainActor
     func removeNode(at index: Int) {
         if built {
             for i in (0 ..< children[index].size).reversed() {
@@ -105,6 +110,7 @@ final class Node {
 
     // MARK: - Container data source
 
+    @MainActor
     func control(at offset: Int) -> Control {
         build()
         if offset == 0, let control = self.control { return control }
@@ -125,6 +131,7 @@ final class Node {
 
     // MARK: - Container changes
 
+    @MainActor
     private func insertControl(at offset: Int) {
         if !(view is OptionalView), let container = view as? LayoutRootView {
             container.insertControl(at: offset, node: self)
@@ -133,6 +140,7 @@ final class Node {
         parent?.insertControl(at: offset + self.offset)
     }
 
+    @MainActor
     private func removeControl(at offset: Int) {
         if !(view is OptionalView), let container = view as? LayoutRootView {
             container.removeControl(at: offset, node: self)

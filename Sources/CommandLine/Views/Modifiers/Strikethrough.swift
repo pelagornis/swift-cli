@@ -1,7 +1,7 @@
 import Foundation
 
 public extension View {
-    func strikethrough(_ isActive: Bool = true) -> some View {
+    @MainActor func strikethrough(_ isActive: Bool = true) -> some View {
         environment(\.strikethrough, isActive)
     }
 }

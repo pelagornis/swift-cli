@@ -1,11 +1,11 @@
-import SwiftTUI
+import CommandLine
 import Foundation
 
 struct ToDoView: View {
     let toDo: ToDo
     let onDelete: () -> Void
 
-    @State var deleting = false 
+    @State var deleting = false
 
     var body: some View {
         HStack {
@@ -19,8 +19,9 @@ struct ToDoView: View {
         }
     }
 
+    @MainActor
     private func delete() {
-        deleting = true 
+        deleting = true
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
             onDelete()
         }

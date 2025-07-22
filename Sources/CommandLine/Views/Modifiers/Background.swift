@@ -1,12 +1,13 @@
 import Foundation
 
 public extension View {
+    @MainActor
     func background(_ color: Color) -> some View {
         return Background(content: self, color: color)
     }
 }
 
-private struct Background<Content: View>: View, PrimitiveView, ModifierView {
+private struct Background<Content: View>: View, PrimitiveView, @preconcurrency ModifierView {
     let content: Content
     let color: Color
 
@@ -29,6 +30,7 @@ private struct Background<Content: View>: View, PrimitiveView, ModifierView {
         }
     }
 
+    @MainActor
     func passControl(_ control: Control, node: Node) -> Control {
         if let backgroundControl = control.parent { return backgroundControl }
         let backgroundControl = BackgroundControl(color: color)

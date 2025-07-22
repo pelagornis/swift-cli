@@ -2,7 +2,8 @@ import Foundation
 
 /// The basic layout object that can be created by a node. Not every node will
 /// create a control (e.g. ForEach won't).
-class Control: LayerDrawing {
+@MainActor
+class Control: @preconcurrency LayerDrawing {
     private(set) var children: [Control] = []
     private(set) var parent: Control?
 
@@ -13,6 +14,7 @@ class Control: LayerDrawing {
 
     var root: Control { parent?.root ?? self }
 
+    @MainActor
     func addSubview(_ view: Control, at index: Int) {
         self.children.insert(view, at: index)
         layer.addLayer(view.layer, at: index)
@@ -29,6 +31,7 @@ class Control: LayerDrawing {
         }
     }
 
+    @MainActor
     func removeSubview(at index: Int) {
         if children[index].isFirstResponder || root.window?.firstResponder?.isDescendant(of: children[index]) == true {
             root.window?.firstResponder?.resignFirstResponder()
@@ -49,7 +52,7 @@ class Control: LayerDrawing {
         return control === parent || parent.isDescendant(of: control)
     }
 
-    func makeLayer() -> Layer {
+    @MainActor func makeLayer() -> Layer {
         let layer = Layer()
         layer.content = self
         return layer
@@ -60,7 +63,7 @@ class Control: LayerDrawing {
     func size(proposedSize: Size) -> Size {
         proposedSize
     }
-
+    @MainActor
     func layout(size: Size) {
         layer.frame.size = size
     }
@@ -82,17 +85,19 @@ class Control: LayerDrawing {
     func cell(at position: Position) -> Cell? { nil }
 
     // MARK: - Event handling
-
+    @MainActor
     func handleEvent(_ char: Character) {
         for subview in children {
             subview.handleEvent(char)
         }
     }
 
+    @MainActor
     func becomeFirstResponder() {
         scroll(to: .zero)
     }
 
+    @MainActor
     func resignFirstResponder() {}
 
     var isFirstResponder: Bool { root.window?.firstResponder === self }
@@ -115,7 +120,7 @@ class Control: LayerDrawing {
     func selectableElement(leftOf index: Int) -> Control? { parent?.selectableElement(leftOf: self.index) }
 
     // MARK: - Scrolling
-
+    @MainActor
     func scroll(to position: Position) {
         parent?.scroll(to: position + layer.frame.position)
     }

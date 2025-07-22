@@ -5,6 +5,7 @@ import Foundation
 /// Such a generic view can be either a `PrimitiveView`, meaning it has custom logic to build
 /// and update the nodes, or a `ComposedView`, meaning it is created using the familiar `View`
 /// struct.
+@MainActor
 protocol GenericView {
     func buildNode(_ node: Node)
     func updateNode(_ node: Node)

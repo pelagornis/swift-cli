@@ -1,7 +1,7 @@
 import Foundation
 
 public extension View {
-    func underline(_ isActive: Bool = true) -> some View {
+    @MainActor func underline(_ isActive: Bool = true) -> some View {
         environment(\.underline, isActive)
     }
 }

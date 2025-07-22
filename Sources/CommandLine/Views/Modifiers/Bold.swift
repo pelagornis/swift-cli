@@ -1,7 +1,7 @@
 import Foundation
 
 public extension View {
-    func bold(_ isActive: Bool = true) -> some View {
+    @MainActor func bold(_ isActive: Bool = true) -> some View {
         environment(\.bold, isActive)
     }
 }

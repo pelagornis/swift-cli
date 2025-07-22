@@ -1,6 +1,7 @@
 import Foundation
 
 public extension View {
+    @MainActor
     func environment<T>(_ keyPath: WritableKeyPath<EnvironmentValues, T>, _ value: T) -> some View {
         return SetEnvironment(content: self, keyPath: keyPath, value: value)
     }

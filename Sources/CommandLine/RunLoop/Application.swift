@@ -3,6 +3,7 @@ import Foundation
 import AppKit
 #endif
 
+@MainActor
 public class Application {
     private let node: Node
     private let window: Window
@@ -16,6 +17,7 @@ public class Application {
     private var invalidatedNodes: [Node] = []
     private var updateScheduled = false
 
+    @MainActor
     public init<I: View>(rootView: I, runLoopType: RunLoopType = .dispatch) {
         self.runLoopType = runLoopType
 
@@ -58,17 +60,28 @@ public class Application {
         renderer.draw()
 
         let stdInSource = DispatchSource.makeReadSource(fileDescriptor: STDIN_FILENO, queue: .main)
-        stdInSource.setEventHandler(qos: .default, flags: [], handler: self.handleInput)
+        stdInSource.setEventHandler { [weak self] in
+            guard let self = self else { return }
+            self.handleInput()
+        }
         stdInSource.resume()
         self.stdInSource = stdInSource
 
         let sigWinChSource = DispatchSource.makeSignalSource(signal: SIGWINCH, queue: .main)
-        sigWinChSource.setEventHandler(qos: .default, flags: [], handler: self.handleWindowSizeChange)
+        sigWinChSource.setEventHandler { [weak self] in
+            guard let self = self else { return }
+            Task { @MainActor in
+                self.handleWindowSizeChange()
+            }
+        }
         sigWinChSource.resume()
 
         signal(SIGINT, SIG_IGN)
         let sigIntSource = DispatchSource.makeSignalSource(signal: SIGINT, queue: .main)
-        sigIntSource.setEventHandler(qos: .default, flags: [], handler: self.stop)
+        sigIntSource.setEventHandler { [weak self] in
+            guard let self = self else { return }
+            self.stop()
+        }
         sigIntSource.resume()
 
         switch runLoopType {
@@ -81,6 +94,7 @@ public class Application {
         #endif
         }
     }
+
 
     private func setInputMode() {
         var tattr = termios()
@@ -140,8 +154,10 @@ public class Application {
 
     func scheduleUpdate() {
         if !updateScheduled {
-            DispatchQueue.main.async { self.update() }
             updateScheduled = true
+            Task { @MainActor in
+                self.update()
+            }
         }
     }
 
