@@ -1,11 +1,11 @@
 import Foundation
 
-/// To enable logging, create an empty file under `/tmp/swift_tui_log`. Logging will append to the
+/// To enable logging, create an empty file under `/tmp/commandline_log`. Logging will append to the
 /// end of this file.
 ///
 /// You can monitor the log live using:
 /// ```
-/// tail -f /tmp/swift_tui_log
+/// tail -f /tmp/commandline_log
 /// ```
 @MainActor
 public func log(_ item: Any, terminator: String = "\n") {
@@ -16,7 +16,7 @@ public func log(_ item: Any, terminator: String = "\n") {
 
 struct LogStream: TextOutputStream {
     func write(_ string: String) {
-        let logURL = URL(fileURLWithPath: "/tmp/swift_tui_log")
+        let logURL = URL(fileURLWithPath: "/tmp/commandline_log")
         guard let data = string.data(using: .utf8) else {
             assertionFailure("Cannot write to log")
             return
