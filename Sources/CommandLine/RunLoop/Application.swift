@@ -86,7 +86,8 @@ public class Application {
 
         switch runLoopType {
         case .dispatch:
-            dispatchMain()
+            // Use RunLoop.main.run() instead of dispatchMain() to avoid conflicts
+            RunLoop.main.run()
         #if os(macOS)
         case .cocoa:
             NSApplication.shared.setActivationPolicy(.accessory)
