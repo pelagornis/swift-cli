@@ -86,7 +86,7 @@ public struct Color: Hashable, Sendable {
     public static var gray: Color { .brightBlack }
 }
 
-struct ANSIColor: Hashable {
+public struct ANSIColor: Hashable, Sendable {
     let foregroundCode: Int
     let backgroundCode: Int
 
